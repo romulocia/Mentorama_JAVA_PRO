@@ -50,11 +50,12 @@ public class AlunosController {
     }
 
     @PostMapping
-    public ResponseEntity<Integer> add(@RequestBody final Alunos nome) {
-        if (nome.getId() == null) {
+    public ResponseEntity<Integer> add(@RequestBody final Alunos nome, @RequestBody final Alunos idade) {
+        if (nome.getId() == null && idade.getId() == null) {
             nome.setId(alunos.size() + 1);
         }
         alunos.add(nome);
+        alunos.add(idade);
         return new ResponseEntity<>(nome.getId(), HttpStatus.CREATED);
     }
 

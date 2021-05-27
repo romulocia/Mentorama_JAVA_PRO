@@ -19,39 +19,30 @@ public class AlunosController {
         alunos.add(new Alunos(1, "Rômulo", 31));
         alunos.add(new Alunos(2, "Carolina", 27));
         alunos.add(new Alunos(3, "Camila", 21));
-        alunos.add(new Alunos(4, "Heloisa", 55));
-        alunos.add(new Alunos(5, "João", 9));
     }
 
     @GetMapping
-    public List<Alunos> findAll(@RequestParam(required = false) String nome) {
-        if (nome != null) {
+    public List<Alunos> findAll(@RequestParam(required = false) String nome, Integer idade) {
+        if (nome != null && idade != null) {
             return alunos.stream()
-                    .filter(nomeFilter -> nomeFilter.getNome().contains(nome))
+                    .filter(alunoStream -> alunoStream.getNome().contains(nome))
+                    .filter(alunoStream -> alunoStream.getIdade().equals(idade))
                     .collect(Collectors.toList());
         }
         return alunos;
     }
 
-    @GetMapping("/{idade}")
-    public Alunos findByIdade(@PathVariable("idade") Integer idade) {
-        return alunos.stream()
-                .filter(idadeFilter -> idadeFilter.getIdade().equals(idade))
-                .findFirst()
-                .orElse(null);
-    }
-
     @GetMapping("/{id}")
     public Alunos findById(@PathVariable("id") Integer id) {
         return alunos.stream()
-                .filter(idFilter -> idFilter.getId().equals(id))
+                .filter(alunoStream -> alunoStream.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
     @PostMapping
     public ResponseEntity<Integer> add(@RequestBody final Alunos nome, @RequestBody final Alunos idade) {
-        if (nome.getId() == null && idade.getId() == null) {
+        if (nome.getId() == null && idade.getIdade() != null) {
             nome.setId(alunos.size() + 1);
         }
         alunos.add(nome);
@@ -60,16 +51,19 @@ public class AlunosController {
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody final Alunos nome) {
+    public ResponseEntity update(@RequestBody final Alunos nome, @RequestBody final Alunos idade) {
         alunos.stream()
-                .filter(msg -> msg.getId().equals(nome.getId()))
-                .forEach(msg -> msg.setNome(nome.getNome()));
+                .filter(alunoStream -> alunoStream.getId().equals(nome.getId()))
+                .forEach(alunoStream -> alunoStream.setNome(nome.getNome()));
+        alunos.stream()
+                .filter(alunoStream -> alunoStream.getId().equals(idade.getId()))
+                .forEach(alunoStream -> alunoStream.setIdade(idade.getIdade()));
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") Integer id) {
-        alunos.removeIf(msg -> msg.getId().equals(id));
+        alunos.removeIf(alunoStream -> alunoStream.getId().equals(id));
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

@@ -53,7 +53,7 @@ public class AlunosController {
         return new ResponseEntity<>(nome.getId(), HttpStatus.CREATED);
     }
 
-    @PatchMapping
+    @PutMapping
     public ResponseEntity update(@RequestBody final Alunos nome, final Alunos idade) {
         alunos.stream()
                 .filter(alunoStream -> alunoStream.getId().equals(nome.getId()))

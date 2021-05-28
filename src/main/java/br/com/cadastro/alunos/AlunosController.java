@@ -18,14 +18,18 @@ public class AlunosController {
         this.alunos = new ArrayList<>();
         alunos.add(new Alunos(1, "Rômulo", 31));
         alunos.add(new Alunos(2, "Carolina", 27));
-        alunos.add(new Alunos(3, "Camila", 21));
+        alunos.add(new Alunos(3, "Fernanda", 8));
     }
 
     @GetMapping
     public List<Alunos> findAll(@RequestParam(required = false) String nome, Integer idade) {
-        if (nome != null && idade != null) {
+        if (nome != null) {
             return alunos.stream()
                     .filter(alunoStream -> alunoStream.getNome().contains(nome))
+                    .collect(Collectors.toList());
+        }
+        if (idade != null) {
+            return alunos.stream()
                     .filter(alunoStream -> alunoStream.getIdade().equals(idade))
                     .collect(Collectors.toList());
         }
@@ -41,17 +45,16 @@ public class AlunosController {
     }
 
     @PostMapping
-    public ResponseEntity<Integer> add(@RequestBody final Alunos nome, @RequestBody final Alunos idade) {
-        if (nome.getId() == null && idade.getIdade() != null) {
+    public ResponseEntity<Integer> add(@RequestBody final Alunos nome) {
+        if (nome.getId() == null) {
             nome.setId(alunos.size() + 1);
         }
         alunos.add(nome);
-        alunos.add(idade);
         return new ResponseEntity<>(nome.getId(), HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity update(@RequestBody final Alunos nome, @RequestBody final Alunos idade) {
+    @PatchMapping
+    public ResponseEntity update(@RequestBody final Alunos nome, final Alunos idade) {
         alunos.stream()
                 .filter(alunoStream -> alunoStream.getId().equals(nome.getId()))
                 .forEach(alunoStream -> alunoStream.setNome(nome.getNome()));

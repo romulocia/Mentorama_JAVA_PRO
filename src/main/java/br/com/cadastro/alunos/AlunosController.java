@@ -54,13 +54,13 @@ public class AlunosController {
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody final Alunos nome, final Alunos idade) {
+    public ResponseEntity update(@RequestBody final Alunos nome) {
         alunos.stream()
                 .filter(alunoStream -> alunoStream.getId().equals(nome.getId()))
                 .forEach(alunoStream -> alunoStream.setNome(nome.getNome()));
         alunos.stream()
-                .filter(alunoStream -> alunoStream.getId().equals(idade.getId()))
-                .forEach(alunoStream -> alunoStream.setIdade(idade.getIdade()));
+                .filter(alunoStream -> alunoStream.getId().equals(nome.getId()))
+                .forEach(alunoStream -> alunoStream.setIdade(nome.getIdade()));
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

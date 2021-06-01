@@ -19,6 +19,7 @@ public class AlunosController {
         alunos.add(new Alunos(1, "Rômulo", 31));
         alunos.add(new Alunos(2, "Carolina", 27));
         alunos.add(new Alunos(3, "Fernanda", 8));
+        alunos.add(new Alunos(4, "Ruan", 18));
     }
 
     @GetMapping
